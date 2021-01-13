@@ -1,0 +1,25 @@
+[
+  {
+    "name": "LIFE",
+    "default": 10,
+    "increment": 4
+  },
+
+  {
+    "name": "ENERGY",
+    "default": 5,
+    "increment": 3
+  },
+
+  {
+    "name": "DEFENSE",
+    "default": 1,
+    "increment": 1
+  },
+
+  {
+    "name": "SPECIAL",
+    "default": 1,
+    "increment": 1
+  }
+]

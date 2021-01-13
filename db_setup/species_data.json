@@ -1,0 +1,28 @@
+[
+  {
+    "name": "JOLLYGATOR",
+    "color": "BLUE",
+    "life": 0,
+    "energy": 1,
+    "defense": 1,
+    "special": 2
+  },
+
+  {
+    "name": "QUAILEAF",
+    "color": "GREEN",
+    "life": 0,
+    "energy": 1,
+    "defense": 2,
+    "special": 1
+  },
+
+  {
+    "name": "BLAZEBRA",
+    "color": "RED",
+    "life": 0,
+    "energy": 2,
+    "defense": 1,
+    "special": 1
+  }
+]

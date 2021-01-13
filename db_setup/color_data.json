@@ -1,0 +1,83 @@
+{
+  "MOD_VALUES": [
+    {"ordinal": -2, "multiple": 0.25},
+    {"ordinal":  -1, "multiple":  0.5},
+    {"ordinal":  1, "multiple": 2}
+  ],
+
+  "COLORS": [
+    {
+      "name": "RED",
+      "mods": {
+        "BLUE": -1,
+        "GREEN": 1,
+        "BROWN": -1
+      }
+    },
+
+    {
+      "name": "BLUE",
+      "mods": {
+        "GREEN": -1,
+        "RED": 1,
+        "BROWN": 1,
+        "TEAL": -2
+      }
+    },
+
+    {
+      "name": "GREEN",
+      "mods": {
+        "BLUE": 1,
+        "RED": -1,
+        "BROWN": 1,
+        "TEAL": -2
+      }
+    },
+
+    {
+      "name": "BLACK",
+      "mods": {
+        "PURPLE": 1
+      }
+    },
+
+    {
+      "name": "YELLOW",
+      "mods": {
+        "BLUE": 1,
+        "BROWN": -2,
+        "TEAL": 1
+      }
+    },
+
+    {
+      "name": "PURPLE",
+      "mods": {
+        "BLACK": 1
+      }
+    },
+
+    {
+      "name": "BROWN",
+      "mods": {
+        "RED": 1,
+        "BLUE": -1,
+        "GREEN": -1
+      }
+    },
+
+    {
+      "name": "TEAL",
+      "mods": {
+        "BLACK": -1,
+        "BROWN": -2
+      }
+    },
+
+    {
+      "name": "WHITE",
+      "mods": {}
+    }
+  ]
+}
