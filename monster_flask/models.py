@@ -63,6 +63,7 @@ class Species(db.Model):
     id_no = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     color_id = db.Column(db.Integer, db.ForeignKey('color.id_no'), nullable=False)
+    monsters = db.relationship('Monster', backref='species_type', lazy=True)
 
     #   base stats
     base_life = db.Column(db.Integer, nullable=False)
@@ -74,18 +75,37 @@ class Species(db.Model):
         return "Species({}: '{}', color: '{}')".format(self.id_no, self.name, self.color_id)
 
 
+class Monster(db.Model):
+    __tablename__ = "monsters"
+    id_no = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+    species_id = db.Column(db.Integer, db.ForeignKey('species.id_no'), nullable=False)
+
 #
 #   STAT MODELS
 
 
-class Stat(db.Model):
-    __tablename__ = "stat"
+class BaseStat(db.Model):
+    __tablename__ = "base_stat"
     id_no = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
     default = db.Column(db.Integer, nullable=False)
     increment = db.Column(db.Integer, nullable=False)
+    applied_stats = db.relationship('AppliedStat', backref="stat_type", lazy=True)
 
     def __repr__(self):
-        return "Stat({}: '{}'. default value: {}, increment: {})".format(
+        return "Stat({}: '{}', default value: {}, increment: {})".format(
             self.id_no, self.name, self.default * self.increment, self.increment
+        )
+
+
+class AppliedStat(db.Model):
+    __tablename__ = "applied_stat"
+    id_no = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.Integer, nullable=False)
+    base_stat = db.Column(db.Integer, db.ForeignKey('base_stat.id_no'), nullable=False)
+
+    def __repr__(self):
+        return "Stat({}: '{}', dv: {}, applied value: {})".format(
+            self.id_no, self.stat.name, self.value, self.base_stat.increment * (self.base_stat.default * self.value)
         )

@@ -1,5 +1,5 @@
 from monster_flask.app import db
-from monster_flask.models import Color, Species, ColorMod, ColorModValue, Stat
+from monster_flask.models import Color, Species, ColorMod, ColorModValue, BaseStat
 import json
 
 with open("db_setup/color_data.json", "r") as file:
@@ -27,7 +27,7 @@ def get_species(d):
 #   STATS
 
 def get_stat(d):
-    return Stat(
+    return BaseStat(
         name=d["name"], default=d["default"], increment=d["increment"]
     )
 

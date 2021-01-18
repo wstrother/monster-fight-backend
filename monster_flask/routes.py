@@ -1,39 +1,72 @@
 from monster_flask.app import app
 from flask import jsonify, request
-from monster_flask.models import Color
+
+from monster_flask.controllers import get_color_data, get_species_data, get_monster_data
+from monster_flask.models import Color, Species, BaseStat
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def prepare_response(data):
+    res = jsonify(data)
+    res.headers.add('Access-Control-Allow-Origin', '*')
+    return res
+
+
+def error(msg):
+    res = prepare_response({
+        "error": msg,
+        "request": request.args
+    })
+    return res, 400
 
 
 @app.route('/color/', methods=['GET'])
 def color():
     if "color" in request.args:
         color_id = int(request.args["color"])
-        color_data = get_color_data(Color.query.get(color_id))
-        return jsonify(color_data)
+
+        c = Color.query.get(color_id)
+        if c is None:
+            return error("'id' value: '{}' not found".format(color_id))
+
+        color_data = get_color_data(c)
+        return prepare_response(color_data)
 
     else:
-        return "error: select a color"
+        return error("select a color by id")
 
 
-def get_color_data(color):
-    mods = []
-    for m in color.attack_mods:
-        mods.append(get_color_mod_data(m))
+@app.route('/species/', methods=['GET'])
+def species():
+    if "species" in request.args:
+        species_id = int(request.args["species"])
 
-    return {
-        "id": color.id_no,
-        "name": color.name,
-        "mods": mods
-    }
+        s = Species.query.get(species_id)
+        if s is None:
+            return error("'id' value: '{}' not found".format(species_id))
+
+        species_data = get_species_data(s)
+        return prepare_response(species_data)
+
+    else:
+        species_list = [
+            get_species_data(s) for s in Species.query.all()
+        ]
+        return prepare_response(species_list)
 
 
-def get_color_mod_data(mod):
-    return {
-        "attacker": mod.attacker_color.name,
-        "target": mod.target_color.name,
-        "multiple": mod.mod_value.multiple
-    }
+@app.route('/monster/', methods=['GET'])
+def monster():
+    if "species" in request.args:
+        species_id = int(request.args["species"])
+
+        s = Species.query.get(species_id)
+        if s is None:
+            return error("'id' value: '{}' not found".format(species_id))
+
+        stats = BaseStat.query.all()
+
+        monster_data = get_monster_data(s, stats)
+        return prepare_response(monster_data)
+
+    else:
+        return error("select a species by id")
