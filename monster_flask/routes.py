@@ -70,3 +70,10 @@ def monster():
 
     else:
         return error("select a species by id")
+
+
+@app.route('/new_character/', methods=['GET'])
+def new_char():
+    return prepare_response({
+        "dv_max": 5
+    })
