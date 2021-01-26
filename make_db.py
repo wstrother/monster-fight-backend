@@ -1,5 +1,6 @@
 from monster_flask.app import db
-from monster_flask.models import Color, Species, ColorMod, ColorModValue, BaseStat
+from monster_flask.controllers import ColorController, SpeciesController, MovesController
+from monster_flask.models import Color, Species, ColorMod, ColorModValue, BaseStat, Dice, DiceValues, Moves
 import json
 
 with open("db_setup/color_data.json", "r") as file:
@@ -11,94 +12,67 @@ with open("db_setup/species_data.json", "r") as file:
 with open("db_setup/stats_data.json", "r") as file:
     STATS = json.load(file)
 
-#   BUILD TABLE ROWS FROM DATA
-
-#   SPECIES
-
-
-def get_species(d):
-    return Species(
-        name=d["name"], color_id=get_color_id(d["color"]),
-        base_life=d["life"], base_energy=d["energy"],
-        base_defense=d["defense"], base_special=d["special"]
-    )
+with open("db_setup/move_data.json", "r") as file:
+    MOVES = json.load(file)
 
 
-#   STATS
-
-def get_stat(d):
-    return BaseStat(
-        name=d["name"], default=d["default"], increment=d["increment"]
-    )
-
-
-#   COLORS AND COLOR MODS
-
-
-def get_mod_value(d):
-    return ColorModValue(multiple=d["multiple"], ordinal=d["ordinal"])
-
-
-def get_color(d):
-    return Color(name=d["name"])
-
-
-def get_color_id(name):
-    return Color.query.filter_by(name=name).first().id_no
-
-
-def get_color_mod(attacker, target, ordinal):
-    return ColorMod(
-        attacker_id=get_color_id(attacker),
-        target_id=get_color_id(target),
-        ordinal=ordinal
-    )
-
-
-#   BUILD THE ACTUAL TABLES
-
-def build_color_tables(session):
-    mod_values = []
+def build_color_tables(controller):
     for mv in COLORS["MOD_VALUES"]:
-        mod_values.append(get_mod_value(mv))
-    session.add_all(mod_values)
+        controller.add_mod_value(mv["multiple"], mv["ordinal"])
 
-    colors = []
     for c in COLORS["COLORS"]:
-        colors.append(get_color(c))
-    session.add_all(colors)
+        controller.add_color(c["name"])
 
-    color_mods = []
     for c in COLORS["COLORS"]:
-        name = c["name"]
+        attacker = c["name"]
         mods = c["mods"]
         for target in mods:
             ordinal = mods[target]
-            color_mods.append(
-                get_color_mod(name, target, ordinal)
-            )
-    session.add_all(color_mods)
+            controller.add_mod(attacker, target, ordinal)
 
 
-def build_species_table(session):
-    species = []
+def build_species_table(species_controller, color_controller):
     for spec in SPECIES:
-        species.append(get_species(spec))
-    session.add_all(species)
+        species_controller.add_species(
+            spec["name"], color_controller.get_color_id(spec["color"]),
+            spec["life"], spec["energy"], spec["defense"], spec["special"]
+        )
 
 
-def build_stats_table(session):
-    stats = []
+def build_stats_table(controller):
     for stat in STATS:
-        stats.append(get_stat(stat))
-    session.add_all(stats)
+        controller.add_stat(stat["name"], stat["default"], stat["increment"])
+
+
+def build_move_tables(move_controller, color_controller):
+    for v in MOVES["DICE_VALUES"]:
+        move_controller.add_dice_value(v)
+
+    for c in MOVES["MOVES"]:
+        for m in MOVES["MOVES"][c]:
+            move_controller.add_move(
+                m["NAME"], color_controller.get_color_id(c)
+            )
+
+            for d in m["DICE"]:
+                color, value = d
+                move_controller.add_die(
+                    move_controller.get_value_id(value),
+                    color_controller.get_color_id(color),
+                    move_controller.get_move_id(m["NAME"])
+                )
 
 
 if __name__ == "__main__":
     db.create_all()
 
-    build_color_tables(db.session)
-    build_species_table(db.session)
-    build_stats_table(db.session)
+    color_cont = ColorController(db, Color, ColorMod, ColorModValue)
+    species_cont = SpeciesController(db, Species, BaseStat)
+    move_cont = MovesController(db, DiceValues, Moves, Dice)
+
+    build_color_tables(color_cont)
+    build_species_table(species_cont, color_cont)
+    build_stats_table(species_cont)
+    build_move_tables(move_cont, color_cont)
 
     db.session.commit()

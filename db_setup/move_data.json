@@ -1,0 +1,401 @@
+{
+    "DICE_VALUES": [2, 4, 6, 8, 12],
+    "MOVES": {
+        "GREEN": [
+            {
+                "NAME": "leech life",
+                "COST": 3,
+                "DICE": [
+                    [
+                        "GREEN",
+                        4
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ]
+                ]
+            },
+            {
+                "NAME": "vine whip",
+                "COST": 5,
+                "DICE": [
+                    [
+                        "GREEN",
+                        6
+                    ],
+                    [
+                        "WHITE",
+                        4
+                    ]
+                ]
+            },
+            {
+                "NAME": "poison sting",
+                "COST": 8,
+                "DICE": [
+                    [
+                        "GREEN",
+                        12
+                    ]
+                ]
+            }
+        ],
+        "PURPLE": [
+            {
+                "NAME": "psychic",
+                "COST": 3,
+                "DICE": [
+                    [
+                        "PURPLE",
+                        4
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ]
+                ]
+            },
+            {
+                "NAME": "dream eater",
+                "COST": 5,
+                "DICE": [
+                    [
+                        "PURPLE",
+                        6
+                    ],
+                    [
+                        "WHITE",
+                        4
+                    ]
+                ]
+            },
+            {
+                "NAME": "psywave",
+                "COST": 8,
+                "DICE": [
+                    [
+                        "PURPLE",
+                        12
+                    ]
+                ]
+            }
+        ],
+        "BLUE": [
+            {
+                "NAME": "bubble beam",
+                "COST": 3,
+                "DICE": [
+                    [
+                        "BLUE",
+                        4
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ]
+                ]
+            },
+            {
+                "NAME": "blizzard",
+                "COST": 5,
+                "DICE": [
+                    [
+                        "BLUE",
+                        6
+                    ],
+                    [
+                        "WHITE",
+                        4
+                    ]
+                ]
+            },
+            {
+                "NAME": "surf",
+                "COST": 8,
+                "DICE": [
+                    [
+                        "BLUE",
+                        12
+                    ]
+                ]
+            }
+        ],
+        "WHITE": [
+            {
+                "NAME": "hyper fang",
+                "COST": 3,
+                "DICE": [
+                    [
+                        "WHITE",
+                        4
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ]
+                ]
+            },
+            {
+                "NAME": "karate chop",
+                "COST": 5,
+                "DICE": [
+                    [
+                        "WHITE",
+                        6
+                    ],
+                    [
+                        "WHITE",
+                        4
+                    ]
+                ]
+            },
+            {
+                "NAME": "slash",
+                "COST": 8,
+                "DICE": [
+                    [
+                        "WHITE",
+                        12
+                    ]
+                ]
+            }
+        ],
+        "BROWN": [
+            {
+                "NAME": "bonemerang",
+                "COST": 3,
+                "DICE": [
+                    [
+                        "BROWN",
+                        4
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ]
+                ]
+            },
+            {
+                "NAME": "dig",
+                "COST": 5,
+                "DICE": [
+                    [
+                        "BROWN",
+                        6
+                    ],
+                    [
+                        "WHITE",
+                        4
+                    ]
+                ]
+            },
+            {
+                "NAME": "fissure",
+                "COST": 8,
+                "DICE": [
+                    [
+                        "BROWN",
+                        12
+                    ]
+                ]
+            }
+        ],
+        "BLACK": [
+            {
+                "NAME": "lick",
+                "COST": 3,
+                "DICE": [
+                    [
+                        "BLACK",
+                        4
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ]
+                ]
+            },
+            {
+                "NAME": "night shade",
+                "COST": 5,
+                "DICE": [
+                    [
+                        "BLACK",
+                        6
+                    ],
+                    [
+                        "WHITE",
+                        4
+                    ]
+                ]
+            },
+            {
+                "NAME": "shadow claw",
+                "COST": 8,
+                "DICE": [
+                    [
+                        "BLACK",
+                        12
+                    ]
+                ]
+            }
+        ],
+        "RED": [
+            {
+                "NAME": "ember",
+                "COST": 3,
+                "DICE": [
+                    [
+                        "RED",
+                        4
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ]
+                ]
+            },
+            {
+                "NAME": "flamethrower",
+                "COST": 5,
+                "DICE": [
+                    [
+                        "RED",
+                        6
+                    ],
+                    [
+                        "WHITE",
+                        4
+                    ]
+                ]
+            },
+            {
+                "NAME": "fire punch",
+                "COST": 8,
+                "DICE": [
+                    [
+                        "RED",
+                        12
+                    ]
+                ]
+            }
+        ],
+        "TEAL": [
+            {
+                "NAME": "sky attack",
+                "COST": 3,
+                "DICE": [
+                    [
+                        "TEAL",
+                        4
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ]
+                ]
+            },
+            {
+                "NAME": "fly",
+                "COST": 5,
+                "DICE": [
+                    [
+                        "TEAL",
+                        6
+                    ],
+                    [
+                        "WHITE",
+                        4
+                    ]
+                ]
+            },
+            {
+                "NAME": "drill peck",
+                "COST": 8,
+                "DICE": [
+                    [
+                        "TEAL",
+                        12
+                    ]
+                ]
+            }
+        ],
+        "YELLOW": [
+            {
+                "NAME": "thunderbolt",
+                "COST": 3,
+                "DICE": [
+                    [
+                        "YELLOW",
+                        4
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ],
+                    [
+                        "WHITE",
+                        2
+                    ]
+                ]
+            },
+            {
+                "NAME": "thunder shock",
+                "COST": 5,
+                "DICE": [
+                    [
+                        "YELLOW",
+                        6
+                    ],
+                    [
+                        "WHITE",
+                        4
+                    ]
+                ]
+            },
+            {
+                "NAME": "thunder",
+                "COST": 8,
+                "DICE": [
+                    [
+                        "YELLOW",
+                        12
+                    ]
+                ]
+            }
+        ]
+    }
+}

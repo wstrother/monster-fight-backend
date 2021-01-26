@@ -13,6 +13,12 @@ class Color(db.Model):
     name = db.Column(db.String(20), unique=True, nullable=False)
 
     species = db.relationship('Species', backref="color", lazy=True)
+
+    dice = db.relationship('Dice', backref="dice_color", lazy=True,
+                           foreign_keys="Dice.color_id")
+    moves = db.relationship('Moves', backref="move_color", lazy=True,
+                            foreign_keys="Moves.color_id")
+
     attack_mods = db.relationship('ColorMod', backref="attacker_color",
                                   lazy=True, foreign_keys="ColorMod.attacker_id")
     target_mods = db.relationship('ColorMod', backref="target_color",
@@ -108,4 +114,43 @@ class AppliedStat(db.Model):
     def __repr__(self):
         return "Stat({}: '{}', dv: {}, applied value: {})".format(
             self.id_no, self.stat.name, self.value, self.base_stat.increment * (self.base_stat.default * self.value)
+        )
+
+
+#
+#   MOVE MODELS
+
+
+class DiceValues(db.Model):
+    __tablename__ = "dice_value"
+    id_no = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.Integer, nullable=False)
+    dice = db.relationship('Dice', backref="damage", lazy=True)
+
+    def __repr__(self):
+        return "DiceValue({}: {})".format(self.id_no, self.value)
+
+
+class Moves(db.Model):
+    __tablename__ = "move"
+    id_no = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+    color_id = db.Column(db.Integer, db.ForeignKey('color.id_no'), nullable=False)
+
+    dice = db.relationship('Dice', backref="value", lazy=True)
+
+    def __repr__(self):
+        return "Move({}: '{}')".format(self.id_no, self.name)
+
+
+class Dice(db.Model):
+    __tablename__ = "die"
+    id_no = db.Column(db.Integer, primary_key=True)
+    value_id = db.Column(db.Integer, db.ForeignKey('dice_value.id_no'), nullable=False)
+    color_id = db.Column(db.Integer, db.ForeignKey('color.id_no'), nullable=False)
+    move_id = db.Column(db.Integer, db.ForeignKey('move.id_no'), nullable=False)
+
+    def __repr__(self):
+        return "Die({}: {}, color id: {}, move: {})".format(
+            self.id_no, self.value_id, self.color_id, self.move_id
         )
