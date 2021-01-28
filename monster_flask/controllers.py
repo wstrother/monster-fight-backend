@@ -46,8 +46,15 @@ class ColorController(ModelController):
 
     # API methods
 
+    def get_all(self):
+        return [self.get_color_data(c) for c in self.color_model.query.all()]
+
     def get_color_by_id(self, color_id):
         color = self.color_model.query.get(color_id)
+
+        if color is None:
+            return {"error": "No color found with id {}".format(color_id)}
+
         return self.get_color_data(color)
 
     @staticmethod
@@ -83,12 +90,16 @@ class StatController(ModelController):
 
     # API methods
 
-    def get_stat_by_id(self, stat_id):
-        stat = self.stat_model.query.get(stat_id)
-        return self.get_stat_data(stat)
-
     def get_all(self):
         return [self.get_stat_data(s) for s in self.stat_model.query.all()]
+
+    def get_stat_by_id(self, stat_id):
+        stat = self.stat_model.query.get(stat_id)
+
+        if stat is None:
+            return {"error": "No stat found with id {}".format(stat_id)}
+
+        return self.get_stat_data(stat)
 
     @staticmethod
     def get_stat_data(stat):
@@ -118,10 +129,18 @@ class SpeciesController(StatController):
 
     def get_species_by_id(self, species_id):
         species = self.species_model.query.get(species_id)
+
+        if species is None:
+            return {"error": "No species found with id {}".format(species_id)}
+
         return self.get_species_data(species)
 
     def get_monster_by_species_id(self, species_id):
         species = self.species_model.query.get(species_id)
+
+        if species is None:
+            return {"error": "No species found with id {}".format(species_id)}
+
         stats = self.stat_model.query.all()
         return self.get_monster_data(species, stats)
 
@@ -186,6 +205,17 @@ class MovesController(ModelController):
 
     def get_move_by_id(self, move_id):
         move = self.moves_model.query.get(move_id)
+
+        if move is None:
+            return {"error": "No move found with id {}".format(move_id)}
+
+        return self.get_move_data(move)
+
+    def get_moves_by_color(self, color_id):
+        return [self.get_move_data(m) for m in self.moves_model.query.filter_by(color_id=color_id)]
+
+    def get_move_by_color_index(self, color_id, index):
+        move = self.moves_model.query.filter_by(color_id=color_id)[int(index)]
         return self.get_move_data(move)
 
     @staticmethod
@@ -193,13 +223,14 @@ class MovesController(ModelController):
         dice = [MovesController.get_die_data(d) for d in move.dice]
         return {
             "name": move.name,
-            "color": move.move_color.name,
-            "dice": dice
+            "color": ColorController.get_color_data(move.move_color),
+            "dice": dice,
+            "id": move.id_no
         }
 
     @staticmethod
     def get_die_data(die):
         return {
             "value": die.damage.value,
-            "color": die.dice_color.name
+            "color": ColorController.get_color_data(die.dice_color)
         }

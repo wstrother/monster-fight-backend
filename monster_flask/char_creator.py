@@ -19,8 +19,15 @@ def get_move_list(move_cont, color_cont, colors, index):
 
 
 def get_move_pool(move_cont, color_cont, species_id):
-    colors = MOVE_POOLS[species_id - 1]
+    colors = MOVE_POOLS[int(species_id) - 1]
     first = get_move_list(move_cont, color_cont, colors, 0)
     second = get_move_list(move_cont, color_cont, colors, 1)
 
     return first, second
+
+
+def get_species_moves(move_cont, species_cont, species_id):
+    species = species_cont.get_species_by_id(species_id)
+    moves = move_cont.get_moves_by_color(species["color"]["id"])
+
+    return moves[0:2]
