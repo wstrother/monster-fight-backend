@@ -19,12 +19,6 @@ class ModelController:
 
 
 class ColorController(ModelController):
-    # def __init__(self, db, color, mod, cmv):
-    #     super(ColorController, self).__init__(db)
-    #     self.color_model = color
-    #     self.mod_model = mod
-    #     self.cmv_model = cmv
-
     # color model
 
     @staticmethod
@@ -85,10 +79,6 @@ class ColorController(ModelController):
 
 
 class StatController(ModelController):
-    # def __init__(self, db, stats):
-    #     super(StatController, self).__init__(db)
-    #     self.stat_model = stats
-
     def add_stat(self, name, default, increment):
         self.add(models.BaseStat(
             name=name, default=default, increment=increment
@@ -117,10 +107,6 @@ class StatController(ModelController):
 
 
 class SpeciesController(ModelController):
-    # def __init__(self, db, species, stats):
-    #     super(SpeciesController, self).__init__(db, stats)
-    #     self.species_model = species
-
     def add_species(self, name, color_id, life, energy, defense, special):
         self.add(models.Species(
             name=name, color_id=color_id,
@@ -171,12 +157,6 @@ class SpeciesController(ModelController):
 
 
 class MovesController(ModelController):
-    # def __init__(self, db, dice_values, moves, dice):
-    #     super(MovesController, self).__init__(db)
-    #     self.values_model = dice_values
-    #     self.moves_model = moves
-    #     self.dice_model = dice
-
     # dice_values model
 
     @staticmethod

@@ -5,7 +5,7 @@ from monster_flask.app import db
 
 
 #   Monster color, represents elemental 'type' and is used to determine damage modifiers such as
-#   SCAB (Same Color Attack Bonus) and 'effectiveness' modifiers
+#   SCAB (Same Color Attack Bonus) and 'effectiveness' modifiers (ColorMod table)
 
 class Color(db.Model):
     __tablename__ = "color"
@@ -63,6 +63,11 @@ class ColorMod(db.Model):
 #
 #   SPECIES MODELS
 
+# A monster species defines the color of that monster and a set of base values for four stats --
+#   life, energy, defense, and special
+# which are stored as integer values representing "deviation values". The species ID is also referenced
+# by the char_creator.py module to provide hardcoded data with regards to Move Pool selection at the
+# time of character creation
 
 class Species(db.Model):
     __tablename__ = "species"
@@ -81,6 +86,10 @@ class Species(db.Model):
         return "Species({}: '{}', color: '{}')".format(self.id_no, self.name, self.color_id)
 
 
+# The Monster table records instances of monsters with a given species who have also had certain
+# character creation choices applied, such as addition "deviation values" applied at character
+# creations and move pool selections used to create a move set
+
 class Monster(db.Model):
     __tablename__ = "monsters"
     id_no = db.Column(db.Integer, primary_key=True)
@@ -90,6 +99,12 @@ class Monster(db.Model):
 #
 #   STAT MODELS
 
+
+# The BaseStat model records the name of the four base stats as well as their respective
+# 'increment' values, which are used in calculation for battle interactions, as well as the
+# 'default' value which defines the standard number of 'deviation values' for that stat which
+# is unique across all species. The calculated value of a stat is equal to it's 'increment'
+# value multiplied by the total number of 'deviation values'
 
 class BaseStat(db.Model):
     __tablename__ = "base_stat"
@@ -104,6 +119,9 @@ class BaseStat(db.Model):
             self.id_no, self.name, self.default * self.increment, self.increment
         )
 
+
+# The AppliedStat table records instances of BaseStat associations for a given Monster after it's
+# additional 'deviation values' are applied based on the Species base stat values and character creation
 
 class AppliedStat(db.Model):
     __tablename__ = "applied_stat"
@@ -121,6 +139,8 @@ class AppliedStat(db.Model):
 #   MOVE MODELS
 
 
+# DiceValues represent the standard damage values that a Move can use in its damage calculation formula
+
 class DiceValues(db.Model):
     __tablename__ = "dice_value"
     id_no = db.Column(db.Integer, primary_key=True)
@@ -130,6 +150,10 @@ class DiceValues(db.Model):
     def __repr__(self):
         return "DiceValue({}: {})".format(self.id_no, self.value)
 
+
+# The Moves table represents an association between a move with a given name and a primary Color (which is
+# used to organize Move Pool selections for the character creation process) as well as a number of Dice
+# which are used for calculating damage
 
 class Moves(db.Model):
     __tablename__ = "move"
@@ -142,6 +166,9 @@ class Moves(db.Model):
     def __repr__(self):
         return "Move({}: '{}')".format(self.id_no, self.name)
 
+
+# The Dice table represents an association between a damage value and a particular Color. Multiple dice
+# can belong to a given move and are used for damage calculation
 
 class Dice(db.Model):
     __tablename__ = "die"
