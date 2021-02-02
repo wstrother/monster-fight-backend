@@ -2,12 +2,11 @@ from monster_flask.app import app, db
 from flask import jsonify, request
 
 from monster_flask import char_creator
-from monster_flask.controllers import ColorController, SpeciesController, MovesController, StatController
-from monster_flask import models
+from monster_flask.controllers import ColorController, SpeciesController, MovesController
 
-COLORS = ColorController(db, models.Color, models.ColorMod, models.ColorModValue)
-SPECIES = SpeciesController(db, models.Species, models.BaseStat)
-MOVES = MovesController(db, models.DiceValues, models.Moves, models.Dice)
+COLORS = ColorController(db)
+SPECIES = SpeciesController(db)
+MOVES = MovesController(db)
 
 
 def prepare_response(data):
