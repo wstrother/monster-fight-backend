@@ -1,7 +1,7 @@
-from monster_flask.app import db
-from monster_flask.controllers import ColorController, SpeciesController, MovesController, StatController
-# from monster_flask.models import Color, Species, ColorMod, ColorModValue, BaseStat, Dice, DiceValues, Moves
 import json
+
+from monster_flask import db, create_app
+from monster_flask.controllers import ColorController, SpeciesController, MovesController, StatController
 
 with open("db_setup/color_data.json", "r") as file:
     COLORS = json.load(file)
@@ -64,16 +64,19 @@ def build_move_tables(move_controller, color_controller):
 
 
 if __name__ == "__main__":
-    db.create_all()
+    app = create_app()
 
-    color_cont = ColorController(db)
-    species_cont = SpeciesController(db)
-    move_cont = MovesController(db)
-    stat_cont = StatController(db)
+    with app.app_context():
+        db.create_all()
 
-    build_color_tables(color_cont)
-    build_species_table(species_cont, color_cont)
-    build_stats_table(stat_cont)
-    build_move_tables(move_cont, color_cont)
+        color_cont = ColorController(db)
+        species_cont = SpeciesController(db)
+        move_cont = MovesController(db)
+        stat_cont = StatController(db)
 
-    db.session.commit()
+        build_color_tables(color_cont)
+        build_species_table(species_cont, color_cont)
+        build_stats_table(stat_cont)
+        build_move_tables(move_cont, color_cont)
+
+        db.session.commit()

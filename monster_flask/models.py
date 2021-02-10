@@ -1,4 +1,4 @@
-from monster_flask.app import db
+from monster_flask import db
 
 
 #   COLOR MODELS
