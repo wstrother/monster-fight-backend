@@ -1,7 +1,7 @@
 import json
 
 from monster_flask import db, create_app
-from monster_flask.controllers import ColorController, SpeciesController, MovesController, StatController
+from monster_flask.game.controllers import ColorController, SpeciesController, MovesController, StatController
 
 with open("db_setup/color_data.json", "r") as file:
     COLORS = json.load(file)

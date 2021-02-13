@@ -1,21 +1,5 @@
-from monster_flask import models
-
-#
-# Format models as JSON for API responses
-
-
-class ModelController:
-    def __init__(self, db):
-        self.db = db
-
-    def add(self, item):
-        self.db.session.add(item)
-
-    def add_all(self, items):
-        self.db.session.add_all(items)
-
-    def commit(self):
-        self.db.commit()
+from monster_flask.game import models
+from monster_flask.utils import ModelController
 
 
 class ColorController(ModelController):
