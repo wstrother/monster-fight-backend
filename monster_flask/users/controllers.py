@@ -36,9 +36,12 @@ class UserController(ModelController):
 
     # API methods
 
+    def get_all_users(self):
+        return [self.get_user_data(u) for u in models.User.query.all()]
+
     @staticmethod
     def get_user_data(user):
         return {
             "username": user.username,
-            "user_id": user.id
+            "id": user.id
         }

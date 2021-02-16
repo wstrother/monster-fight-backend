@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 from monster_flask.config import Config
 
@@ -8,6 +9,8 @@ db = SQLAlchemy()
 
 def create_app(cfg=Config):
     app = Flask(__name__)
+    CORS(app)
+
     app.config.from_object(cfg)
     db.init_app(app)
 

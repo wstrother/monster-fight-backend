@@ -156,27 +156,27 @@ class MovesController(ModelController):
 
     @staticmethod
     def get_move_id(name):
-        return models.Moves.query.filter_by(name=name).first().id_no
+        return models.Move.query.filter_by(name=name).first().id_no
 
     def add_move(self, name, color_id):
-        self.add(models.Moves(
+        self.add(models.Move(
             name=name, color_id=color_id
         ))
 
     # dice model
 
     def add_die(self, value_id, color_id, move_id):
-        self.add(models.Dice(
+        self.add(models.Die(
             value_id=value_id, color_id=color_id, move_id=move_id
         ))
 
     # API methods
 
     def get_all(self):
-        return [self.get_move_data(m) for m in models.Moves.query.all()]
+        return [self.get_move_data(m) for m in models.Move.query.all()]
 
     def get_move_by_id(self, move_id):
-        move = models.Moves.query.get(move_id)
+        move = models.Move.query.get(move_id)
 
         if move is None:
             return {"error": "No move found with id {}".format(move_id)}
@@ -184,10 +184,10 @@ class MovesController(ModelController):
         return self.get_move_data(move)
 
     def get_moves_by_color(self, color_id):
-        return [self.get_move_data(m) for m in models.Moves.query.filter_by(color_id=color_id)]
+        return [self.get_move_data(m) for m in models.Move.query.filter_by(color_id=color_id)]
 
     def get_move_by_color_index(self, color_id, index):
-        move = models.Moves.query.filter_by(color_id=color_id)[int(index)]
+        move = models.Move.query.filter_by(color_id=color_id)[int(index)]
 
         return self.get_move_data(move)
 

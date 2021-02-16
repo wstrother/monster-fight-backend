@@ -7,6 +7,7 @@ from monster_flask import db
 #   Monster color, represents elemental 'type' and is used to determine damage modifiers such as
 #   SCAB (Same Color Attack Bonus) and 'effectiveness' modifiers (ColorMod table)
 
+
 class Color(db.Model):
     __tablename__ = "color"
     id_no = db.Column(db.Integer, primary_key=True)
@@ -14,10 +15,10 @@ class Color(db.Model):
 
     species = db.relationship('Species', backref="color", lazy=True)
 
-    dice = db.relationship('Dice', backref="dice_color", lazy=True,
-                           foreign_keys="Dice.color_id")
-    moves = db.relationship('Moves', backref="move_color", lazy=True,
-                            foreign_keys="Moves.color_id")
+    dice = db.relationship('Die', backref="dice_color", lazy=True,
+                           foreign_keys="Die.color_id")
+    moves = db.relationship('Move', backref="move_color", lazy=True,
+                            foreign_keys="Move.color_id")
 
     attack_mods = db.relationship('ColorMod', backref="attacker_color",
                                   lazy=True, foreign_keys="ColorMod.attacker_id")
@@ -95,6 +96,20 @@ class Monster(db.Model):
     id_no = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id_no'), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id_no'))
+
+    # applied stats
+    life = db.Column(db.Integer, db.ForeignKey('applied_stat.id_no'))
+    energy = db.Column(db.Integer, db.ForeignKey('applied_stat.id_no'))
+    defense = db.Column(db.Integer, db.ForeignKey('applied_stat.id_no'))
+    special = db.Column(db.Integer, db.ForeignKey('applied_stat.id_no'))
+
+    # moves
+    move_1 = db.Column(db.Integer, db.ForeignKey('move.id_no'))
+    move_2 = db.Column(db.Integer, db.ForeignKey('move.id_no'))
+    move_3 = db.Column(db.Integer, db.ForeignKey('move.id_no'))
+    move_4 = db.Column(db.Integer, db.ForeignKey('move.id_no'))
+
 
 #
 #   STAT MODELS
@@ -145,7 +160,7 @@ class DiceValues(db.Model):
     __tablename__ = "dice_value"
     id_no = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Integer, nullable=False)
-    dice = db.relationship('Dice', backref="damage", lazy=True)
+    dice = db.relationship('Die', backref="damage", lazy=True)
 
     def __repr__(self):
         return "DiceValue({}: {})".format(self.id_no, self.value)
@@ -155,13 +170,13 @@ class DiceValues(db.Model):
 # used to organize Move Pool selections for the character creation process) as well as a number of Dice
 # which are used for calculating damage
 
-class Moves(db.Model):
+class Move(db.Model):
     __tablename__ = "move"
     id_no = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     color_id = db.Column(db.Integer, db.ForeignKey('color.id_no'), nullable=False)
 
-    dice = db.relationship('Dice', backref="value", lazy=True)
+    dice = db.relationship('Die', backref="value", lazy=True)
 
     def __repr__(self):
         return "Move({}: '{}')".format(self.id_no, self.name)
@@ -170,7 +185,7 @@ class Moves(db.Model):
 # The Dice table represents an association between a damage value and a particular Color. Multiple dice
 # can belong to a given move and are used for damage calculation
 
-class Dice(db.Model):
+class Die(db.Model):
     __tablename__ = "die"
     id_no = db.Column(db.Integer, primary_key=True)
     value_id = db.Column(db.Integer, db.ForeignKey('dice_value.id_no'), nullable=False)
@@ -181,3 +196,7 @@ class Dice(db.Model):
         return "Die({}: {}, color id: {}, move: {})".format(
             self.id_no, self.value_id, self.color_id, self.move_id
         )
+
+
+
+

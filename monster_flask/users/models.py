@@ -1,14 +1,17 @@
-from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import validates
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from monster_flask import db
 from monster_flask.utils import password_strength
 
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id_no = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
+
+    monsters = db.relationship('Monster', backref="owner", lazy=True,
+                               foreign_keys="Monster.owner_id")
 
     @validates('username')
     def validate_username(self, key, username):

@@ -4,12 +4,6 @@ from flask import jsonify, request, current_app
 def prepare_response(data, status=None):
     res = jsonify(data)
 
-    # !!!
-    # DO NOT INCLUDE THIS IN PRODUCTION ENVIRONMENT
-    # !!!
-    if current_app.config['DEBUG']:
-        res.headers.add('Access-Control-Allow-Origin', '*')
-
     if "error" in data:
         data.update({"request": request.args})
         if not status:

@@ -11,14 +11,14 @@ from monster_flask.users.controllers import UserController
 users = Blueprint('users', __name__)
 
 USERS = UserController(db)
-TOKEN_HEADER_NAME = "auth-token"
+TOKEN_HEADER_NAME = "token"
 SECURITY_ALG = 'HS256'
 
 
 def require_token(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if "auth-token" not in request.headers:
+        if "token" not in request.headers:
             return prepare_response({"error": f"'{TOKEN_HEADER_NAME}' header is required"}, 401)
 
         try:
@@ -29,7 +29,10 @@ def require_token(f):
         except jwt.DecodeError:
             return prepare_response({"error": "Bad token passed"}, 403)
 
-        user_id = data["user_id"]
+        except jwt.ExpiredSignatureError:
+            return prepare_response({"error": "Token has expired"}, 403)
+
+        user_id = data["id"]
         user = USERS.get_user_by_id(user_id)
 
         if not user:
@@ -81,7 +84,7 @@ def new_user(username, password):
         return prepare_response({"error": str(e)})
 
 
-@users.route('/get_user', methods=['GET'])
+@users.route('/users', methods=['GET'])
 def get_user():
     if "user_id" in request.args:
         user_id = request.args["user_id"]
@@ -98,22 +101,16 @@ def get_user():
             })
 
     else:
-        return prepare_response({
-            "error": "Please provide a user_id"
-        })
+        return prepare_response(USERS.get_all_users())
 
 
-@users.route('/get_dashboard', methods=['GET'])
+@users.route('/check_token', methods=['GET'])
 @require_token
-def get_dashboard(user):
-    return prepare_response({
-        "username": user.username,
-        "user_id": user.id,
-        "success": "Token verified"
-    })
+def check_token(user):
+    return prepare_response(USERS.get_user_data(user))
 
 
-@users.route('/login')
+@users.route('/login', methods=['POST'])
 @user_auth
 def login(username, password):
     data = USERS.check_login(username, password)
@@ -123,7 +120,7 @@ def login(username, password):
 
     else:
         data["exp"] = datetime.datetime.utcnow() + datetime.timedelta(hours=2)
-        data["auth-token"] = jwt.encode(
+        data["token"] = jwt.encode(
             data, current_app.config["SECRET_KEY"], algorithm=SECURITY_ALG
         )
 
